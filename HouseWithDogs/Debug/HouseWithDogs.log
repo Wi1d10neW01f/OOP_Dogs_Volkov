@@ -1,6 +1,11 @@
-﻿  dog.cpp
-  MyForm.cpp
-  WatchDog.cpp
-  Создание кода...
-  dog.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
+﻿  MyForm.cpp
+C:\Users\admin\source\repos\HouseWithDogs\HouseWithDogs\DecorDog.h(8): warning C4490: override: неправильное использование спецификатора переопределения; "DecorDog::eat" не соответствует методу базового класса-ссылки
+  C:\Users\admin\source\repos\HouseWithDogs\HouseWithDogs\DecorDog.h(8): note: "new" или "override" разрешены только, когда существует соответствующий базовый метод из класса ref
+C:\Users\admin\source\repos\HouseWithDogs\HouseWithDogs\DecorDog.h(39): warning C4490: override: неправильное использование спецификатора переопределения; "DecorDog::changeHungry" не соответствует методу базового класса-ссылки
+  C:\Users\admin\source\repos\HouseWithDogs\HouseWithDogs\DecorDog.h(39): note: "new" или "override" разрешены только, когда существует соответствующий базовый метод из класса ref
+C:\Users\admin\source\repos\HouseWithDogs\HouseWithDogs\WatchDog.h(7): warning C4490: override: неправильное использование спецификатора переопределения; "WatchDog::eat" не соответствует методу базового класса-ссылки
+  C:\Users\admin\source\repos\HouseWithDogs\HouseWithDogs\WatchDog.h(7): note: "new" или "override" разрешены только, когда существует соответствующий базовый метод из класса ref
+C:\Users\admin\source\repos\HouseWithDogs\HouseWithDogs\WatchDog.h(41): warning C4490: override: неправильное использование спецификатора переопределения; "WatchDog::changeHungry" не соответствует методу базового класса-ссылки
+  C:\Users\admin\source\repos\HouseWithDogs\HouseWithDogs\WatchDog.h(41): note: "new" или "override" разрешены только, когда существует соответствующий базовый метод из класса ref
+  DecorDog.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
   HouseWithDogs.vcxproj -> C:\Users\admin\source\repos\HouseWithDogs\Debug\HouseWithDogs.exe

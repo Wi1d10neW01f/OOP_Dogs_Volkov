@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{FA5D1A05-CB49-4CF9-AFCE-43BC1C1A1E6E}</ProjectGuid>
+    <ProjectGuid>{F5CA163E-8175-493B-8CB1-8BC8F5E6745C}</ProjectGuid>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>HouseWithDogs</RootNamespace>

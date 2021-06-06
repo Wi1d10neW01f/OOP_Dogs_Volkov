@@ -37,10 +37,11 @@ public:
 
 	dog(int agr, bool gm, bool un, bool eat, int vol, int hu);
 
-	virtual void checkHungry(int hungry) {
+	virtual bool checkHungry(int hungry) {
 		if (hungry == 0) {
-			this->eating = 1;
+			return 1;
 		}
+		else return 0;
 	}
 	virtual void eat(bool eating) {
 		while (hungry != 100) {

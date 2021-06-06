@@ -4,14 +4,13 @@ ref class DecorDog :
 	public dog
 {
 public:
-	DecorDog();
-	virtual void eat(bool eating) override {
-		while (hungry != 100) {
-			hungry += 30;
-			if (hungry > 100)
-				hungry = 100;
+	DecorDog() {};
+	virtual void eat() override {
+		hungry += 30;
+		if (hungry > 100) {
+			hungry = 100;
+			eating = 0;
 		}
-		eating = 0;
 	}
 	virtual void checkUnknown(bool unknown, bool grandmaster, int hungry) override {
 		if (unknown) {
@@ -30,14 +29,20 @@ public:
 		if (agressive > 100)
 			agressive = 100;
 	}
-	virtual void changeVolume(int agressive) override {
+	virtual void changeVolume(int agressive) override{
 		if (agressive > 10) {
 			volume = 3;
 		}
 		else
 			volume = 2;
 	}
-
+	virtual bool changeHungry(int hungry) override {
+		if (hungry < 40) {
+			return 1;
+		}
+		else return 0;
+	}
+	
 	DecorDog(int agr, bool gm, bool un, bool eat, int vol, int hu);
 };
 

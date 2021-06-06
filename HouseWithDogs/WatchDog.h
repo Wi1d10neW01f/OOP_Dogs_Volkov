@@ -4,13 +4,12 @@ ref class WatchDog :public dog
 {
 public:
 	WatchDog() {};
-	virtual void eat(bool eating) override {
-		while (hungry != 100) {
+	virtual void eat() override {
 			hungry += 15;
-			if (hungry > 100)
+			if (hungry > 100) {
 				hungry = 100;
-		}
-		eating = 0;
+				eating = 0;
+			}
 	}
 	virtual void checkUnknown(bool unknown, bool grandmaster, int hungry) override {
 		if (unknown) {
@@ -38,6 +37,12 @@ public:
 		}
 		else
 			volume = 2;
+	}
+	virtual bool changeHungry(int hungry) override {
+		if (hungry < 15) {
+			return 1;
+		}
+		else return 0;
 	}
 
 	WatchDog(int agr, bool gm, bool un, bool eat, int vol, int hu);

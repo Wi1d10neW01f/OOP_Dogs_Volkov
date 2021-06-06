@@ -1,4 +1,7 @@
 #pragma once
+#include "dog.h"
+#include "DecorDog.h"
+#include "WatchDog.h"
 
 namespace HouseWithDogs {
 
@@ -8,7 +11,8 @@ namespace HouseWithDogs {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-
+	using namespace System::Threading;
+	using namespace System::Threading::Tasks;
 	/// <summary>
 	/// —водка дл€ MyForm
 	/// </summary>
@@ -22,7 +26,6 @@ namespace HouseWithDogs {
 			//TODO: добавьте код конструктора
 			//
 		}
-
 	protected:
 		/// <summary>
 		/// ќсвободить все используемые ресурсы.
@@ -35,17 +38,27 @@ namespace HouseWithDogs {
 			}
 		}
 	private: System::Windows::Forms::PictureBox^ PIC;
+	private: System::Windows::Forms::Button^ BUT_Sim;
+	private: System::Windows::Forms::Label^ LBL_AgrDD;
+	private: System::Windows::Forms::Label^ LBL_AgrWD;
 	protected:
-
 	protected:
-	private: System::Windows::Forms::Button^ button1;
-
+	private: System::Windows::Forms::Label^ label3;
+	private: System::Windows::Forms::Label^ label4;
+	private: System::Windows::Forms::Label^ label5;
+	private: System::Windows::Forms::Label^ label6;
+	private: System::Windows::Forms::Label^ LBL_HungryWD;
+	private: System::Windows::Forms::Label^ LBL_HungryDD;
+	private: System::Windows::Forms::Label^ label9;
+	private: System::Windows::Forms::Label^ label10;
+	private: System::Windows::Forms::Label^ LBL_VolumeWD;
+	private: System::Windows::Forms::Label^ LBL_VolumeDD;
+	private: System::Windows::Forms::Button^ BUT_CheckEat;
 	private:
 		/// <summary>
 		/// ќб€зательна€ переменна€ конструктора.
 		/// </summary>
-		System::ComponentModel::Container ^components;
-
+		System::ComponentModel::Container^ components;
 #pragma region Windows Form Designer generated code
 		/// <summary>
 		/// “ребуемый метод дл€ поддержки конструктора Ч не измен€йте 
@@ -55,52 +68,251 @@ namespace HouseWithDogs {
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->PIC = (gcnew System::Windows::Forms::PictureBox());
-			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->BUT_Sim = (gcnew System::Windows::Forms::Button());
+			this->LBL_AgrDD = (gcnew System::Windows::Forms::Label());
+			this->LBL_AgrWD = (gcnew System::Windows::Forms::Label());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->LBL_HungryWD = (gcnew System::Windows::Forms::Label());
+			this->LBL_HungryDD = (gcnew System::Windows::Forms::Label());
+			this->label9 = (gcnew System::Windows::Forms::Label());
+			this->label10 = (gcnew System::Windows::Forms::Label());
+			this->LBL_VolumeWD = (gcnew System::Windows::Forms::Label());
+			this->LBL_VolumeDD = (gcnew System::Windows::Forms::Label());
+			this->BUT_CheckEat = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->PIC))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// PIC
 			// 
 			this->PIC->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"PIC.Image")));
-			this->PIC->Location = System::Drawing::Point(12, 12);
+			this->PIC->Location = System::Drawing::Point(13, 13);
 			this->PIC->Name = L"PIC";
-			this->PIC->Size = System::Drawing::Size(428, 408);
+			this->PIC->Size = System::Drawing::Size(577, 456);
 			this->PIC->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->PIC->TabIndex = 0;
 			this->PIC->TabStop = false;
 			// 
-			// button1
+			// BUT_Sim
 			// 
-			this->button1->Location = System::Drawing::Point(447, 13);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(175, 23);
-			this->button1->TabIndex = 1;
-			this->button1->Text = L"button1";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &MyForm::Button1_Click);
+			this->BUT_Sim->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->BUT_Sim->Location = System::Drawing::Point(596, 12);
+			this->BUT_Sim->Name = L"BUT_Sim";
+			this->BUT_Sim->Size = System::Drawing::Size(164, 47);
+			this->BUT_Sim->TabIndex = 1;
+			this->BUT_Sim->Text = L"Simulation";
+			this->BUT_Sim->UseVisualStyleBackColor = true;
+			// 
+			// LBL_AgrDD
+			// 
+			this->LBL_AgrDD->AutoSize = true;
+			this->LBL_AgrDD->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->LBL_AgrDD->Location = System::Drawing::Point(12, 472);
+			this->LBL_AgrDD->Name = L"LBL_AgrDD";
+			this->LBL_AgrDD->Size = System::Drawing::Size(54, 20);
+			this->LBL_AgrDD->TabIndex = 2;
+			this->LBL_AgrDD->Text = L"100%";
+			// 
+			// LBL_AgrWD
+			// 
+			this->LBL_AgrWD->AutoSize = true;
+			this->LBL_AgrWD->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->LBL_AgrWD->Location = System::Drawing::Point(12, 496);
+			this->LBL_AgrWD->Name = L"LBL_AgrWD";
+			this->LBL_AgrWD->Size = System::Drawing::Size(54, 20);
+			this->LBL_AgrWD->TabIndex = 3;
+			this->LBL_AgrWD->Text = L"100%";
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label3->Location = System::Drawing::Point(72, 472);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(157, 20);
+			this->label3->TabIndex = 4;
+			this->label3->Text = L"«лость DecorDog";
+			// 
+			// label4
+			// 
+			this->label4->AutoSize = true;
+			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label4->Location = System::Drawing::Point(72, 496);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(160, 20);
+			this->label4->TabIndex = 5;
+			this->label4->Text = L"«лость WatchDog";
+			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label5->Location = System::Drawing::Point(321, 496);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(171, 20);
+			this->label5->TabIndex = 9;
+			this->label5->Text = L"—ытость WatchDog";
+			// 
+			// label6
+			// 
+			this->label6->AutoSize = true;
+			this->label6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label6->Location = System::Drawing::Point(321, 472);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(168, 20);
+			this->label6->TabIndex = 8;
+			this->label6->Text = L"—ытость DecorDog";
+			// 
+			// LBL_HungryWD
+			// 
+			this->LBL_HungryWD->AutoSize = true;
+			this->LBL_HungryWD->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->LBL_HungryWD->Location = System::Drawing::Point(261, 496);
+			this->LBL_HungryWD->Name = L"LBL_HungryWD";
+			this->LBL_HungryWD->Size = System::Drawing::Size(54, 20);
+			this->LBL_HungryWD->TabIndex = 7;
+			this->LBL_HungryWD->Text = L"100%";
+			// 
+			// LBL_HungryDD
+			// 
+			this->LBL_HungryDD->AutoSize = true;
+			this->LBL_HungryDD->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->LBL_HungryDD->Location = System::Drawing::Point(261, 472);
+			this->LBL_HungryDD->Name = L"LBL_HungryDD";
+			this->LBL_HungryDD->Size = System::Drawing::Size(54, 20);
+			this->LBL_HungryDD->TabIndex = 6;
+			this->LBL_HungryDD->Text = L"100%";
+			// 
+			// label9
+			// 
+			this->label9->AutoSize = true;
+			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label9->Location = System::Drawing::Point(582, 496);
+			this->label9->Name = L"label9";
+			this->label9->Size = System::Drawing::Size(188, 20);
+			this->label9->TabIndex = 13;
+			this->label9->Text = L"√ромкость WatchDog";
+			// 
+			// label10
+			// 
+			this->label10->AutoSize = true;
+			this->label10->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label10->Location = System::Drawing::Point(582, 472);
+			this->label10->Name = L"label10";
+			this->label10->Size = System::Drawing::Size(185, 20);
+			this->label10->TabIndex = 12;
+			this->label10->Text = L"√ромкость DecorDog";
+			// 
+			// LBL_VolumeWD
+			// 
+			this->LBL_VolumeWD->AutoSize = true;
+			this->LBL_VolumeWD->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->LBL_VolumeWD->Location = System::Drawing::Point(522, 496);
+			this->LBL_VolumeWD->Name = L"LBL_VolumeWD";
+			this->LBL_VolumeWD->Size = System::Drawing::Size(54, 20);
+			this->LBL_VolumeWD->TabIndex = 11;
+			this->LBL_VolumeWD->Text = L"100%";
+			// 
+			// LBL_VolumeDD
+			// 
+			this->LBL_VolumeDD->AutoSize = true;
+			this->LBL_VolumeDD->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->LBL_VolumeDD->Location = System::Drawing::Point(522, 472);
+			this->LBL_VolumeDD->Name = L"LBL_VolumeDD";
+			this->LBL_VolumeDD->Size = System::Drawing::Size(54, 20);
+			this->LBL_VolumeDD->TabIndex = 10;
+			this->LBL_VolumeDD->Text = L"100%";
+			// 
+			// BUT_CheckEat
+			// 
+			this->BUT_CheckEat->Location = System::Drawing::Point(597, 66);
+			this->BUT_CheckEat->Name = L"BUT_CheckEat";
+			this->BUT_CheckEat->Size = System::Drawing::Size(163, 23);
+			this->BUT_CheckEat->TabIndex = 14;
+			this->BUT_CheckEat->Text = L"Check Eating";
+			this->BUT_CheckEat->UseVisualStyleBackColor = true;
+			this->BUT_CheckEat->Click += gcnew System::EventHandler(this, &MyForm::BUT_CheckEat_Click);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(634, 432);
-			this->Controls->Add(this->button1);
+			this->ClientSize = System::Drawing::Size(772, 535);
+			this->Controls->Add(this->BUT_CheckEat);
+			this->Controls->Add(this->label9);
+			this->Controls->Add(this->label10);
+			this->Controls->Add(this->LBL_VolumeWD);
+			this->Controls->Add(this->LBL_VolumeDD);
+			this->Controls->Add(this->label5);
+			this->Controls->Add(this->label6);
+			this->Controls->Add(this->LBL_HungryWD);
+			this->Controls->Add(this->LBL_HungryDD);
+			this->Controls->Add(this->label4);
+			this->Controls->Add(this->label3);
+			this->Controls->Add(this->LBL_AgrWD);
+			this->Controls->Add(this->LBL_AgrDD);
+			this->Controls->Add(this->BUT_Sim);
 			this->Controls->Add(this->PIC);
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->PIC))->EndInit();
 			this->ResumeLayout(false);
-
+			this->PerformLayout();
 		}
 #pragma endregion
-		//constants
-		String^ path = "C:\\Users\\admin\\Desktop\\Pictures";
-
-
-
-		//
-
-	private: System::Void Button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		//constants and objects
+		String ^ path = "C:\\Users\\admin\\source\\repos\\HouseWithDogs\\Pictures\\";
+		DecorDog^ DD = gcnew DecorDog();
+		WatchDog^ WD = gcnew WatchDog();
+		//buttons
+	private: System::Void BUT_CheckEat_Click(System::Object ^ sender, System::EventArgs ^ e) {
+		DD->hungry = 0;
+		WD->hungry = 0;
+		LBL_HungryDD->Text = DD->hungry.ToString();
+		LBL_HungryDD->Refresh();
+		DD->eating = 1;
+		WD->eating = 1;
+		startEating();
 	}
+			 //funtions
+			 void startEating() {
+				 while (DD->eating || WD->eating) {
+					 if (DD->eating && WD->eating) {
+						 DD->eat();
+						 WD->eat();
+						 PIC->Image = Image::FromFile(path + "Eat\\0.png");
+					 }
+					 else if (DD->eating) {
+						 DD->eat();
+						 PIC->Image = Image::FromFile(path + "Eat\\1.png");
+					 }
+					 else if (WD->eating) {
+						 WD->eat();
+						 PIC->Image = Image::FromFile(path + "Eat\\2.png");
+					 }
+					 LBL_HungryDD->Text = DD->hungry.ToString();
+					 LBL_HungryWD->Text = WD->hungry.ToString();
+					 LBL_HungryWD->Refresh();
+					 LBL_HungryDD->Refresh();
+					 PIC->Refresh();
+					 Thread::Sleep(550);
+				 }
+				 PIC->Image = Image::FromFile(path + "chill.png");
+			 }
 	};
 }
