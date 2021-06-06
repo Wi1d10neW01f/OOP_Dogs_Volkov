@@ -42,7 +42,6 @@ public:
 		}
 		else return 0;
 	}
-	
 	DecorDog(int agr, bool gm, bool un, bool eat, int vol, int hu);
 };
 

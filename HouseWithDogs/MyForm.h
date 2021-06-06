@@ -54,6 +54,8 @@ namespace HouseWithDogs {
 	private: System::Windows::Forms::Label^ LBL_VolumeWD;
 	private: System::Windows::Forms::Label^ LBL_VolumeDD;
 	private: System::Windows::Forms::Button^ BUT_CheckEat;
+	private: System::Windows::Forms::Button^ BUT_CheckAgr;
+	private: System::Windows::Forms::Button^ But_CheckVol;
 	private:
 		/// <summary>
 		/// Обязательная переменная конструктора.
@@ -82,6 +84,8 @@ namespace HouseWithDogs {
 			this->LBL_VolumeWD = (gcnew System::Windows::Forms::Label());
 			this->LBL_VolumeDD = (gcnew System::Windows::Forms::Label());
 			this->BUT_CheckEat = (gcnew System::Windows::Forms::Button());
+			this->BUT_CheckAgr = (gcnew System::Windows::Forms::Button());
+			this->But_CheckVol = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->PIC))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -105,6 +109,7 @@ namespace HouseWithDogs {
 			this->BUT_Sim->TabIndex = 1;
 			this->BUT_Sim->Text = L"Simulation";
 			this->BUT_Sim->UseVisualStyleBackColor = true;
+			this->BUT_Sim->Click += gcnew System::EventHandler(this, &MyForm::BUT_Sim_Click);
 			// 
 			// LBL_AgrDD
 			// 
@@ -248,11 +253,33 @@ namespace HouseWithDogs {
 			this->BUT_CheckEat->UseVisualStyleBackColor = true;
 			this->BUT_CheckEat->Click += gcnew System::EventHandler(this, &MyForm::BUT_CheckEat_Click);
 			// 
+			// BUT_CheckAgr
+			// 
+			this->BUT_CheckAgr->Location = System::Drawing::Point(597, 96);
+			this->BUT_CheckAgr->Name = L"BUT_CheckAgr";
+			this->BUT_CheckAgr->Size = System::Drawing::Size(163, 23);
+			this->BUT_CheckAgr->TabIndex = 15;
+			this->BUT_CheckAgr->Text = L"Check Agressive";
+			this->BUT_CheckAgr->UseVisualStyleBackColor = true;
+			this->BUT_CheckAgr->Click += gcnew System::EventHandler(this, &MyForm::BUT_CheckAgr_Click);
+			// 
+			// But_CheckVol
+			// 
+			this->But_CheckVol->Location = System::Drawing::Point(597, 126);
+			this->But_CheckVol->Name = L"But_CheckVol";
+			this->But_CheckVol->Size = System::Drawing::Size(163, 23);
+			this->But_CheckVol->TabIndex = 16;
+			this->But_CheckVol->Text = L"Check Volume";
+			this->But_CheckVol->UseVisualStyleBackColor = true;
+			this->But_CheckVol->Click += gcnew System::EventHandler(this, &MyForm::But_CheckVol_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(772, 535);
+			this->Controls->Add(this->But_CheckVol);
+			this->Controls->Add(this->BUT_CheckAgr);
 			this->Controls->Add(this->BUT_CheckEat);
 			this->Controls->Add(this->label9);
 			this->Controls->Add(this->label10);
@@ -273,6 +300,7 @@ namespace HouseWithDogs {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->PIC))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
+
 		}
 #pragma endregion
 		//constants and objects
@@ -288,6 +316,40 @@ namespace HouseWithDogs {
 		DD->eating = 1;
 		WD->eating = 1;
 		startEating();
+	}
+	private: System::Void BUT_CheckAgr_Click(System::Object ^ sender, System::EventArgs ^ e) {
+		array<int>^ random = gcnew array<int>(12);
+		Random^ k = gcnew Random();
+		for (int i = 0; i < 12; i++) {
+			random[i] = k->Next(50,101);
+		}
+		WD->agressive = random[0];
+		WD->volume = 1;
+		WD->hungry = 100;// random[1];
+		DD->agressive = random[2];
+		DD->volume = 2;
+		DD->hungry = 100;// random[3];
+		WD->unknown = 0;
+		WD->grandmaster = 0;
+		WD->eating = 0;
+		DD->unknown = 0;
+		DD->grandmaster = 0;
+		DD->eating = 0;
+		LBL_AgrDD->Text = DD->agressive.ToString();
+		LBL_AgrWD->Text = WD->agressive.ToString();
+		LBL_HungryDD->Text = DD->hungry.ToString();
+		LBL_HungryWD->Text = WD->hungry.ToString();
+		LBL_AgrDD->Refresh();
+		LBL_AgrWD->Refresh();
+		LBL_HungryDD->Refresh();
+		LBL_HungryWD->Refresh();
+
+		spawnUnknown();
+	}
+	private: System::Void But_CheckVol_Click(System::Object ^ sender, System::EventArgs ^ e) {
+
+	}
+	private: System::Void BUT_Sim_Click(System::Object ^ sender, System::EventArgs ^ e) {
 	}
 			 //funtions
 			 void startEating() {
@@ -313,6 +375,49 @@ namespace HouseWithDogs {
 					 Thread::Sleep(550);
 				 }
 				 PIC->Image = Image::FromFile(path + "chill.png");
+			 }
+			 void spawnUnknown() {
+				 Random^ k = gcnew Random();
+				 int a = k->Next(0, 201);
+				 if (a < 101) {
+					 spawnMen();
+				 }
+				 else if (a > 200) {
+					 spawnCourier();
+				 }
+				 else {
+					 //spawnChild();
+				 }
+				 PIC->Image = Image::FromFile(path + "chill.png");
+			 }
+			 void spawnMen() {
+				 DD->checkUnknown(1, 0, DD->hungry);
+				 WD->checkUnknown(1, 0, WD->hungry);
+				 LBL_AgrDD->Text = DD->agressive.ToString();
+				 LBL_AgrDD->Refresh();
+				 LBL_AgrWD->Text = WD->agressive.ToString();
+				 LBL_AgrWD->Refresh();
+				 for (int i = 0; i < 3; i++) {
+					 if (i < 2)
+						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
+					 if (WD->agressive > 80 && i == 2)
+						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
+					 PIC->Refresh();
+					 Thread::Sleep(550);
+				 }
+			 }
+			 void spawnCourier() {
+				 DD->checkUnknown(1, 1, DD->hungry);
+				 WD->checkUnknown(1, 1, WD->hungry);
+				 LBL_AgrDD->Text = DD->agressive.ToString();
+				 LBL_AgrDD->Refresh();
+				 LBL_AgrWD->Text = WD->agressive.ToString();
+				 LBL_AgrWD->Refresh();
+				 for (int i = 0; i < 2; i++) {
+					 PIC->Image = Image::FromFile(path + "PizzaTime\\" + i.ToString() + ".png");
+					 PIC->Refresh();
+					 Thread::Sleep(550);
+				 }
 			 }
 	};
 }
