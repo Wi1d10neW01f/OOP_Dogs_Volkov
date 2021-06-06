@@ -78,4 +78,9 @@ public:
 		else
 			volume = 2;
 	}
+	virtual void GrandSpawn() {
+		if (grandmaster) {
+			agressive -= 35;
+		}
+	}
 };

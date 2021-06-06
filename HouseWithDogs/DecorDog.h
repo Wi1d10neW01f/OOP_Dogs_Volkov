@@ -30,7 +30,7 @@ public:
 			agressive = 100;
 	}
 	virtual void changeVolume(int agressive) override{
-		if (agressive > 10) {
+		if (agressive > 45) {
 			volume = 3;
 		}
 		else

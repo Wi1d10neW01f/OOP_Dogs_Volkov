@@ -2,7 +2,9 @@
 #include "dog.h"
 #include "DecorDog.h"
 #include "WatchDog.h"
-
+#include <random>
+#include <Windows.h>
+#include <time.h>
 namespace HouseWithDogs {
 
 	using namespace System;
@@ -321,7 +323,7 @@ namespace HouseWithDogs {
 		array<int>^ random = gcnew array<int>(12);
 		Random^ k = gcnew Random();
 		for (int i = 0; i < 12; i++) {
-			random[i] = k->Next(50,101);
+			random[i] = k->Next(50, 101);
 		}
 		WD->agressive = random[0];
 		WD->volume = 1;
@@ -350,8 +352,53 @@ namespace HouseWithDogs {
 
 	}
 	private: System::Void BUT_Sim_Click(System::Object ^ sender, System::EventArgs ^ e) {
+		DD->agressive = randomMinMax(40, 15);
+		DD->hungry = randomMinMax(80, 60);
+		DD->volume = 1;
+		DD->grandmaster = 0;
+		DD->eating = 0;
+		DD->unknown = 0;
+		WD->agressive = randomMinMax(40, 15);
+		WD->hungry = randomMinMax(80, 60);
+		WD->volume = 1;
+		WD->grandmaster = 0;
+		WD->eating = 0;
+		WD->unknown = 0;
+		int countOfSim = 25;
+		for (int i = 0; i < countOfSim; i++) {
+			Simulation();
+		}
+		
 	}
-			 //funtions
+			 //functions
+			 void changeVolumeDD(int volume) {
+				 switch (volume) {
+				 case 2:
+					 LBL_VolumeDD->Text = "50 Да";
+					 break;
+				 case 3: 
+					 LBL_VolumeDD->Text = "80 Да";
+					 break;
+				 case 1:
+					 LBL_VolumeDD->Text = "20 Да";
+					 break;
+				 }
+				 LBL_VolumeDD->Refresh();
+			 }
+			 void changeVolumeWD(int volume) {
+				 switch (volume) {
+				 case 2:
+					 LBL_VolumeWD->Text = "70 Да";
+					 break;
+				 case 3:
+					 LBL_VolumeWD->Text = "90 Да";
+					 break;
+				 case 1:
+					 LBL_VolumeWD->Text = "30 Да";
+					 break;
+				 }
+				 LBL_VolumeWD->Refresh();
+			 }
 			 void startEating() {
 				 while (DD->eating || WD->eating) {
 					 if (DD->eating && WD->eating) {
@@ -378,7 +425,7 @@ namespace HouseWithDogs {
 			 }
 			 void spawnUnknown() {
 				 Random^ k = gcnew Random();
-				 int a = k->Next(0, 201);
+				 int a = k->Next(0, 301);
 				 if (a < 101) {
 					 spawnMen();
 				 }
@@ -386,7 +433,7 @@ namespace HouseWithDogs {
 					 spawnCourier();
 				 }
 				 else {
-					 //spawnChild();
+					 spawnChild();
 				 }
 				 PIC->Image = Image::FromFile(path + "chill.png");
 			 }
@@ -398,10 +445,16 @@ namespace HouseWithDogs {
 				 LBL_AgrWD->Text = WD->agressive.ToString();
 				 LBL_AgrWD->Refresh();
 				 for (int i = 0; i < 3; i++) {
-					 if (i < 2)
+					 if (i < 2) {
 						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
-					 if (WD->agressive > 80 && i == 2)
+						 WD->changeVolume(WD->agressive);
+						 changeVolumeWD(WD->volume);
+					 }
+					 if (WD->agressive > 60 && i == 2) {
+						 WD->changeVolume(WD->agressive);
+						 changeVolumeWD(WD->volume);
 						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
+					 }
 					 PIC->Refresh();
 					 Thread::Sleep(550);
 				 }
@@ -414,10 +467,50 @@ namespace HouseWithDogs {
 				 LBL_AgrWD->Text = WD->agressive.ToString();
 				 LBL_AgrWD->Refresh();
 				 for (int i = 0; i < 2; i++) {
+					 WD->changeVolume(WD->agressive);
+					 changeVolumeWD(WD->volume); 
+					 DD->changeVolume(WD->agressive);
+					 changeVolumeWD(DD->volume);
 					 PIC->Image = Image::FromFile(path + "PizzaTime\\" + i.ToString() + ".png");
 					 PIC->Refresh();
 					 Thread::Sleep(550);
 				 }
+			 }
+			 void spawnChild() {
+				 DD->checkUnknown(1, 0, DD->hungry);
+				 WD->checkUnknown(1, 0, WD->hungry);
+				 DD->Agressive = 25;
+				 LBL_AgrDD->Text = DD->agressive.ToString();
+				 LBL_AgrDD->Refresh();
+				 LBL_AgrWD->Text = WD->agressive.ToString();
+				 LBL_AgrWD->Refresh();
+				 WD->changeVolume(WD->agressive);
+				 changeVolumeWD(WD->volume);
+				 PIC->Image = Image::FromFile(path + "0.png");
+				 PIC->Refresh();
+				 Thread::Sleep(550);
+			 }
+			 void spawnMaster() {
+				 DD->grandmaster = 1;
+				 WD->grandmaster = 1;
+				 DD->GrandSpawn();
+				 WD->GrandSpawn();
+				 LBL_AgrWD->Text = DD->agressive.ToString();
+				 LBL_AgrWD->Text = WD->agressive.ToString();
+				 PIC->Image = Image::FromFile(path + "1.png");
+				 Thread::Sleep(550);
+			 }
+			 int randomMinMax(int Max, int Min) {
+				 return(rand() % (Max + 1 - Min) + Min);
+			 }
+			 //main function
+			 void Simulation() {
+				 spawnUnknown();
+				 if (randomMinMax(0, 2) == 1)
+					 spawnMaster();
+				 startEating();
+				 DD->hungry -= 15;
+				 WD->hungry -= 5;
 			 }
 	};
 }
