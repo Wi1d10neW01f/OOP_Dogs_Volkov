@@ -306,9 +306,10 @@ namespace HouseWithDogs {
 		}
 #pragma endregion
 		//constants and objects
-		String ^ path = "C:\\Users\\admin\\source\\repos\\HouseWithDogs\\Pictures\\";
+		String ^ path = "..\\Pictures\\";
 		DecorDog^ DD = gcnew DecorDog();
 		WatchDog^ WD = gcnew WatchDog();
+		const int TimeSleep = 550;
 		//buttons
 	private: System::Void BUT_CheckEat_Click(System::Object ^ sender, System::EventArgs ^ e) {
 		DD->hungry = 0;
@@ -419,7 +420,7 @@ namespace HouseWithDogs {
 					 LBL_HungryWD->Refresh();
 					 LBL_HungryDD->Refresh();
 					 PIC->Refresh();
-					 Thread::Sleep(550);
+					 Thread::Sleep(TimeSleep);
 				 }
 				 PIC->Image = Image::FromFile(path + "chill.png");
 			 }
@@ -444,19 +445,19 @@ namespace HouseWithDogs {
 				 LBL_AgrDD->Refresh();
 				 LBL_AgrWD->Text = WD->agressive.ToString();
 				 LBL_AgrWD->Refresh();
-				 for (int i = 0; i < 3; i++) {
-					 if (i < 2) {
+				 for (int i = 0; i < 6; i++) {
+					 if (i < 5) {
 						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
 						 WD->changeVolume(WD->agressive);
 						 changeVolumeWD(WD->volume);
 					 }
-					 if (WD->agressive > 60 && i == 2) {
+					 if (WD->agressive == 100 && i == 5) {
 						 WD->changeVolume(WD->agressive);
 						 changeVolumeWD(WD->volume);
 						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
 					 }
 					 PIC->Refresh();
-					 Thread::Sleep(550);
+					 Thread::Sleep(TimeSleep);
 				 }
 			 }
 			 void spawnCourier() {
@@ -466,17 +467,18 @@ namespace HouseWithDogs {
 				 LBL_AgrDD->Refresh();
 				 LBL_AgrWD->Text = WD->agressive.ToString();
 				 LBL_AgrWD->Refresh();
-				 for (int i = 0; i < 2; i++) {
+				 for (int i = 0; i < 4; i++) {
 					 WD->changeVolume(WD->agressive);
 					 changeVolumeWD(WD->volume); 
 					 DD->changeVolume(WD->agressive);
 					 changeVolumeWD(DD->volume);
 					 PIC->Image = Image::FromFile(path + "PizzaTime\\" + i.ToString() + ".png");
 					 PIC->Refresh();
-					 Thread::Sleep(550);
+					 Thread::Sleep(TimeSleep);
 				 }
 			 }
 			 void spawnChild() {
+				 int a = randomMinMax(0, 1);
 				 DD->checkUnknown(1, 0, DD->hungry);
 				 WD->checkUnknown(1, 0, WD->hungry);
 				 DD->Agressive = 25;
@@ -486,9 +488,9 @@ namespace HouseWithDogs {
 				 LBL_AgrWD->Refresh();
 				 WD->changeVolume(WD->agressive);
 				 changeVolumeWD(WD->volume);
-				 PIC->Image = Image::FromFile(path + "0.png");
+				 PIC->Image = Image::FromFile(path + a.ToString() + ".png");
 				 PIC->Refresh();
-				 Thread::Sleep(550);
+				 Thread::Sleep(TimeSleep);
 			 }
 			 void spawnMaster() {
 				 DD->grandmaster = 1;
@@ -498,7 +500,7 @@ namespace HouseWithDogs {
 				 LBL_AgrWD->Text = DD->agressive.ToString();
 				 LBL_AgrWD->Text = WD->agressive.ToString();
 				 PIC->Image = Image::FromFile(path + "1.png");
-				 Thread::Sleep(550);
+				 Thread::Sleep(TimeSleep);
 			 }
 			 int randomMinMax(int Max, int Min) {
 				 return(rand() % (Max + 1 - Min) + Min);
