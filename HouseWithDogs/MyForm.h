@@ -230,9 +230,9 @@ namespace HouseWithDogs {
 				static_cast<System::Byte>(204)));
 			this->LBL_VolumeWD->Location = System::Drawing::Point(522, 496);
 			this->LBL_VolumeWD->Name = L"LBL_VolumeWD";
-			this->LBL_VolumeWD->Size = System::Drawing::Size(54, 20);
+			this->LBL_VolumeWD->Size = System::Drawing::Size(48, 20);
 			this->LBL_VolumeWD->TabIndex = 11;
-			this->LBL_VolumeWD->Text = L"100%";
+			this->LBL_VolumeWD->Text = L"0 Да";
 			// 
 			// LBL_VolumeDD
 			// 
@@ -241,9 +241,9 @@ namespace HouseWithDogs {
 				static_cast<System::Byte>(204)));
 			this->LBL_VolumeDD->Location = System::Drawing::Point(522, 472);
 			this->LBL_VolumeDD->Name = L"LBL_VolumeDD";
-			this->LBL_VolumeDD->Size = System::Drawing::Size(54, 20);
+			this->LBL_VolumeDD->Size = System::Drawing::Size(48, 20);
 			this->LBL_VolumeDD->TabIndex = 10;
-			this->LBL_VolumeDD->Text = L"100%";
+			this->LBL_VolumeDD->Text = L"0 Да";
 			// 
 			// BUT_CheckEat
 			// 
@@ -253,6 +253,7 @@ namespace HouseWithDogs {
 			this->BUT_CheckEat->TabIndex = 14;
 			this->BUT_CheckEat->Text = L"Check Eating";
 			this->BUT_CheckEat->UseVisualStyleBackColor = true;
+			this->BUT_CheckEat->Visible = false;
 			this->BUT_CheckEat->Click += gcnew System::EventHandler(this, &MyForm::BUT_CheckEat_Click);
 			// 
 			// BUT_CheckAgr
@@ -263,6 +264,7 @@ namespace HouseWithDogs {
 			this->BUT_CheckAgr->TabIndex = 15;
 			this->BUT_CheckAgr->Text = L"Check Agressive";
 			this->BUT_CheckAgr->UseVisualStyleBackColor = true;
+			this->BUT_CheckAgr->Visible = false;
 			this->BUT_CheckAgr->Click += gcnew System::EventHandler(this, &MyForm::BUT_CheckAgr_Click);
 			// 
 			// But_CheckVol
@@ -273,6 +275,7 @@ namespace HouseWithDogs {
 			this->But_CheckVol->TabIndex = 16;
 			this->But_CheckVol->Text = L"Check Volume";
 			this->But_CheckVol->UseVisualStyleBackColor = true;
+			this->But_CheckVol->Visible = false;
 			this->But_CheckVol->Click += gcnew System::EventHandler(this, &MyForm::But_CheckVol_Click);
 			// 
 			// MyForm
@@ -324,20 +327,22 @@ namespace HouseWithDogs {
 		array<int>^ random = gcnew array<int>(12);
 		Random^ k = gcnew Random();
 		for (int i = 0; i < 12; i++) {
-			random[i] = k->Next(50, 101);
+			random[i] = k->Next(25, 50);
 		}
 		WD->agressive = random[0];
-		WD->volume = 1;
-		WD->hungry = 100;// random[1];
+		WD->changeVolume(WD->agressive);
+		WD->hungry = random[1];
 		DD->agressive = random[2];
-		DD->volume = 2;
-		DD->hungry = 100;// random[3];
+		DD->changeVolume(DD->agressive);
+		DD->hungry =  random[3];
 		WD->unknown = 0;
 		WD->grandmaster = 0;
 		WD->eating = 0;
 		DD->unknown = 0;
 		DD->grandmaster = 0;
 		DD->eating = 0;
+		changeVolumeDD(DD->volume);
+		changeVolumeWD(WD->volume);
 		LBL_AgrDD->Text = DD->agressive.ToString();
 		LBL_AgrWD->Text = WD->agressive.ToString();
 		LBL_HungryDD->Text = DD->hungry.ToString();
@@ -365,6 +370,7 @@ namespace HouseWithDogs {
 		WD->grandmaster = 0;
 		WD->eating = 0;
 		WD->unknown = 0;
+		changeLBLs();
 		int countOfSim = 25;
 		for (int i = 0; i < countOfSim; i++) {
 			Simulation();
@@ -438,6 +444,19 @@ namespace HouseWithDogs {
 				 }
 				 PIC->Image = Image::FromFile(path + "chill.png");
 			 }
+			 void changeLBLs() {
+				 LBL_AgrDD->Text = DD->agressive.ToString();
+				 LBL_AgrWD->Text = WD->agressive.ToString();
+				 LBL_HungryDD->Text = DD->hungry.ToString();
+				 LBL_HungryWD->Text = WD->hungry.ToString();
+				 LBL_AgrDD->Refresh();
+				 LBL_AgrWD->Refresh();
+				 LBL_HungryDD->Refresh();
+				 LBL_HungryWD->Refresh();
+				 changeVolumeDD(1);
+				 changeVolumeWD(1);
+			 }
+
 			 void spawnMen() {
 				 DD->checkUnknown(1, 0, DD->hungry);
 				 WD->checkUnknown(1, 0, WD->hungry);
@@ -445,15 +464,19 @@ namespace HouseWithDogs {
 				 LBL_AgrDD->Refresh();
 				 LBL_AgrWD->Text = WD->agressive.ToString();
 				 LBL_AgrWD->Refresh();
-				 for (int i = 0; i < 6; i++) {
-					 if (i < 5) {
+				 for (int i = 0; i < 5; i++) {
+					 if (i < 4) {
 						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
 						 WD->changeVolume(WD->agressive);
+						 DD->changeVolume(WD->agressive);
+						 changeVolumeDD(DD->volume);
 						 changeVolumeWD(WD->volume);
 					 }
-					 if (WD->agressive == 100 && i == 5) {
+					 if (WD->agressive == 90 && i == 4) {
 						 WD->changeVolume(WD->agressive);
 						 changeVolumeWD(WD->volume);
+						 DD->changeVolume(WD->agressive);
+						 changeVolumeDD(DD->volume);
 						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
 					 }
 					 PIC->Refresh();
@@ -474,6 +497,9 @@ namespace HouseWithDogs {
 					 changeVolumeWD(DD->volume);
 					 PIC->Image = Image::FromFile(path + "PizzaTime\\" + i.ToString() + ".png");
 					 PIC->Refresh();
+					 if(i==2)
+						 WD->GrandSpawn();
+						 DD->GrandSpawn();
 					 Thread::Sleep(TimeSleep);
 				 }
 			 }
@@ -500,19 +526,25 @@ namespace HouseWithDogs {
 				 LBL_AgrWD->Text = DD->agressive.ToString();
 				 LBL_AgrWD->Text = WD->agressive.ToString();
 				 PIC->Image = Image::FromFile(path + "1.png");
+				 if(DD->agressive >50){WD->agressive=35;}
+				 if(WD->agressive >50){DD->agressive=35;}
+				 if(DD->agressive <0){WD->agressive=5;}
+				 if(WD->agressive <0){DD->agressive=5;}
 				 Thread::Sleep(TimeSleep);
 			 }
 			 int randomMinMax(int Max, int Min) {
-				 return(rand() % (Max + 1 - Min) + Min);
+				 return(rand() % (Max - Min) + Min);
 			 }
 			 //main function
 			 void Simulation() {
 				 spawnUnknown();
-				 if (randomMinMax(0, 2) == 1)
+				 if (randomMinMax(3, 1) == 1||WD->agressive>80||DD->agressive>80)
 					 spawnMaster();
 				 startEating();
 				 DD->hungry -= 15;
 				 WD->hungry -= 5;
+				 //I KNOW WHO WILL SPAWN, WUAHAHAHAH
+				 //Mb its needed to delete, but pust' budet;
 			 }
 	};
 }

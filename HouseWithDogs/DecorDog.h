@@ -14,18 +14,18 @@ public:
 	}
 	virtual void checkUnknown(bool unknown, bool grandmaster, int hungry) override {
 		if (unknown) {
-			agressive += 100;
+			agressive += 40;
 		}
 		if (grandmaster)
-			agressive -= 10;
-		if (hungry <= 75)
-			agressive += 40;
-		if (hungry <= 50)
-			agressive += 55;
-		if (hungry <= 25)
-			agressive += 100;
+			agressive -= 50;
 		if (hungry == 0)
-			agressive = 100;
+			agressive = 90;
+		else if (hungry <= 25)
+			agressive += 50;
+		else if (hungry <= 50)
+			agressive += 25;
+		else if (hungry <= 75)
+			agressive += 15;
 		if (agressive > 100)
 			agressive = 100;
 	}

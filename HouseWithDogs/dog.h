@@ -80,7 +80,9 @@ public:
 	}
 	virtual void GrandSpawn() {
 		if (grandmaster) {
-			agressive -= 35;
+			agressive -= 75;
 		}
+		if (agressive < 0)
+			agressive = 0;
 	}
 };
