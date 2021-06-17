@@ -58,6 +58,7 @@ namespace HouseWithDogs {
 	private: System::Windows::Forms::Button^ BUT_CheckEat;
 	private: System::Windows::Forms::Button^ BUT_CheckAgr;
 	private: System::Windows::Forms::Button^ But_CheckVol;
+	private: System::Windows::Forms::Button^ Debug__;
 	private:
 		/// <summary>
 		/// Обязательная переменная конструктора.
@@ -88,6 +89,7 @@ namespace HouseWithDogs {
 			this->BUT_CheckEat = (gcnew System::Windows::Forms::Button());
 			this->BUT_CheckAgr = (gcnew System::Windows::Forms::Button());
 			this->But_CheckVol = (gcnew System::Windows::Forms::Button());
+			this->Debug__ = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->PIC))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -278,11 +280,22 @@ namespace HouseWithDogs {
 			this->But_CheckVol->Visible = false;
 			this->But_CheckVol->Click += gcnew System::EventHandler(this, &MyForm::But_CheckVol_Click);
 			// 
+			// Debug__
+			// 
+			this->Debug__->Location = System::Drawing::Point(597, 156);
+			this->Debug__->Name = L"Debug__";
+			this->Debug__->Size = System::Drawing::Size(163, 23);
+			this->Debug__->TabIndex = 17;
+			this->Debug__->Text = L"Debug";
+			this->Debug__->UseVisualStyleBackColor = true;
+			this->Debug__->Click += gcnew System::EventHandler(this, &MyForm::Debug___Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(772, 535);
+			this->Controls->Add(this->Debug__);
 			this->Controls->Add(this->But_CheckVol);
 			this->Controls->Add(this->BUT_CheckAgr);
 			this->Controls->Add(this->BUT_CheckEat);
@@ -546,5 +559,7 @@ namespace HouseWithDogs {
 				 //I KNOW WHO WILL SPAWN, WUAHAHAHAH
 				 //Mb its needed to delete, but pust' budet;
 			 }
-	};
+	private: System::Void Debug___Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }
