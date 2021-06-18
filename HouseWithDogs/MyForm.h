@@ -5,6 +5,7 @@
 #include <random>
 #include <Windows.h>
 #include <time.h>
+#include "Man.h"
 namespace HouseWithDogs {
 
 	using namespace System;
@@ -325,6 +326,10 @@ namespace HouseWithDogs {
 		String ^ path = "..\\Pictures\\";
 		DecorDog^ DD = gcnew DecorDog();
 		WatchDog^ WD = gcnew WatchDog();
+		Man^ m = gcnew Man();
+		const int dur = 5;//не верю, что в миллисекундах, но и не верю, что в секундах.
+		const int freq = 1200;//как я понял, герцовка звука. Именно ентот параметр отвечает за то, какой звук будет.
+		//верхний можешь потыркать, но не думаю, что это что-то изменит.
 		const int TimeSleep = 550;
 		//buttons
 	private: System::Void BUT_CheckEat_Click(System::Object ^ sender, System::EventArgs ^ e) {
@@ -445,6 +450,7 @@ namespace HouseWithDogs {
 			 }
 			 void spawnUnknown() {
 				 Random^ k = gcnew Random();
+				 m->radius = 70;
 				 int a = k->Next(0, 301);
 				 if (a < 101) {
 					 spawnMen();
@@ -484,6 +490,9 @@ namespace HouseWithDogs {
 						 DD->changeVolume(WD->agressive);
 						 changeVolumeDD(DD->volume);
 						 changeVolumeWD(WD->volume);
+						 if (m->radius <= WD->ragezone) {
+							 Console::Beep(freq, dur);
+						 }
 					 }
 					 if (WD->agressive == 90 && i == 4) {
 						 WD->changeVolume(WD->agressive);
@@ -492,6 +501,7 @@ namespace HouseWithDogs {
 						 changeVolumeDD(DD->volume);
 						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
 					 }
+					 m->radius -= 20;
 					 PIC->Refresh();
 					 Thread::Sleep(TimeSleep);
 				 }
@@ -509,10 +519,15 @@ namespace HouseWithDogs {
 					 DD->changeVolume(WD->agressive);
 					 changeVolumeWD(DD->volume);
 					 PIC->Image = Image::FromFile(path + "PizzaTime\\" + i.ToString() + ".png");
+					 if (m->radius <= WD->ragezone|| m->radius<=DD->ragezone) {
+						 Console::Beep(freq, dur);
+					 }
 					 PIC->Refresh();
-					 if(i==2)
+					 if (i == 2) {
 						 WD->GrandSpawn();
 						 DD->GrandSpawn();
+					 }
+					 m->radius -= 25;
 					 Thread::Sleep(TimeSleep);
 				 }
 			 }
@@ -529,6 +544,7 @@ namespace HouseWithDogs {
 				 changeVolumeWD(WD->volume);
 				 PIC->Image = Image::FromFile(path + a.ToString() + ".png");
 				 PIC->Refresh();
+				 Console::Beep(freq, dur);
 				 Thread::Sleep(TimeSleep);
 			 }
 			 void spawnMaster() {
@@ -560,6 +576,7 @@ namespace HouseWithDogs {
 				 //Mb its needed to delete, but pust' budet;
 			 }
 	private: System::Void Debug___Click(System::Object^ sender, System::EventArgs^ e) {
+		Console::Beep(freq, dur);
 	}
 };
 }

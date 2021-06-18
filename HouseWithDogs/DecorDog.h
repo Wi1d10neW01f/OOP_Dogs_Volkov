@@ -4,6 +4,7 @@ ref class DecorDog :
 	public dog
 {
 public:
+	const int ragezone = 40;
 	DecorDog() {};
 	virtual void eat() override {
 		hungry += 30;

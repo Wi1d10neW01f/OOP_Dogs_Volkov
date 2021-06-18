@@ -4,6 +4,7 @@ ref class WatchDog :public dog
 {
 public:
 	WatchDog() {};
+	const int ragezone = 20;
 	virtual void eat() override {
 			hungry += 15;
 			if (hungry > 100) {
