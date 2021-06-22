@@ -16,6 +16,7 @@ namespace HouseWithDogs {
 	using namespace System::Drawing;
 	using namespace System::Threading;
 	using namespace System::Threading::Tasks;
+	using namespace System::Media;
 	/// <summary>
 	/// —водка дл€ MyForm
 	/// </summary>
@@ -112,7 +113,7 @@ namespace HouseWithDogs {
 			this->BUT_Sim->Name = L"BUT_Sim";
 			this->BUT_Sim->Size = System::Drawing::Size(164, 47);
 			this->BUT_Sim->TabIndex = 1;
-			this->BUT_Sim->Text = L"Simulation";
+			this->BUT_Sim->Text = L"—имул€ци€";
 			this->BUT_Sim->UseVisualStyleBackColor = true;
 			this->BUT_Sim->Click += gcnew System::EventHandler(this, &MyForm::BUT_Sim_Click);
 			// 
@@ -126,6 +127,7 @@ namespace HouseWithDogs {
 			this->LBL_AgrDD->Size = System::Drawing::Size(54, 20);
 			this->LBL_AgrDD->TabIndex = 2;
 			this->LBL_AgrDD->Text = L"100%";
+			this->LBL_AgrDD->Visible = false;
 			// 
 			// LBL_AgrWD
 			// 
@@ -137,6 +139,7 @@ namespace HouseWithDogs {
 			this->LBL_AgrWD->Size = System::Drawing::Size(54, 20);
 			this->LBL_AgrWD->TabIndex = 3;
 			this->LBL_AgrWD->Text = L"100%";
+			this->LBL_AgrWD->Visible = false;
 			// 
 			// label3
 			// 
@@ -148,6 +151,7 @@ namespace HouseWithDogs {
 			this->label3->Size = System::Drawing::Size(157, 20);
 			this->label3->TabIndex = 4;
 			this->label3->Text = L"«лость DecorDog";
+			this->label3->Visible = false;
 			// 
 			// label4
 			// 
@@ -159,6 +163,7 @@ namespace HouseWithDogs {
 			this->label4->Size = System::Drawing::Size(160, 20);
 			this->label4->TabIndex = 5;
 			this->label4->Text = L"«лость WatchDog";
+			this->label4->Visible = false;
 			// 
 			// label5
 			// 
@@ -214,6 +219,7 @@ namespace HouseWithDogs {
 			this->label9->Size = System::Drawing::Size(188, 20);
 			this->label9->TabIndex = 13;
 			this->label9->Text = L"√ромкость WatchDog";
+			this->label9->Visible = false;
 			// 
 			// label10
 			// 
@@ -225,6 +231,7 @@ namespace HouseWithDogs {
 			this->label10->Size = System::Drawing::Size(185, 20);
 			this->label10->TabIndex = 12;
 			this->label10->Text = L"√ромкость DecorDog";
+			this->label10->Visible = false;
 			// 
 			// LBL_VolumeWD
 			// 
@@ -236,6 +243,7 @@ namespace HouseWithDogs {
 			this->LBL_VolumeWD->Size = System::Drawing::Size(48, 20);
 			this->LBL_VolumeWD->TabIndex = 11;
 			this->LBL_VolumeWD->Text = L"0 дЅ";
+			this->LBL_VolumeWD->Visible = false;
 			// 
 			// LBL_VolumeDD
 			// 
@@ -247,6 +255,7 @@ namespace HouseWithDogs {
 			this->LBL_VolumeDD->Size = System::Drawing::Size(48, 20);
 			this->LBL_VolumeDD->TabIndex = 10;
 			this->LBL_VolumeDD->Text = L"0 дЅ";
+			this->LBL_VolumeDD->Visible = false;
 			// 
 			// BUT_CheckEat
 			// 
@@ -287,7 +296,7 @@ namespace HouseWithDogs {
 			this->Debug__->Name = L"Debug__";
 			this->Debug__->Size = System::Drawing::Size(163, 23);
 			this->Debug__->TabIndex = 17;
-			this->Debug__->Text = L"Debug";
+			this->Debug__->Text = L"ƒебаг";
 			this->Debug__->UseVisualStyleBackColor = true;
 			this->Debug__->Click += gcnew System::EventHandler(this, &MyForm::Debug___Click);
 			// 
@@ -327,10 +336,12 @@ namespace HouseWithDogs {
 		DecorDog^ DD = gcnew DecorDog();
 		WatchDog^ WD = gcnew WatchDog();
 		Man^ m = gcnew Man();
+		SoundPlayer^ DDvoice = gcnew SoundPlayer("..\\Sound\\dd.wav");
+		SoundPlayer^ WDvoice = gcnew SoundPlayer("..\\Sound\\wd.wav");
 		const int dur = 5;//не верю, что в миллисекундах, но и не верю, что в секундах.
 		const int freq = 1200;//как € пон€л, герцовка звука. »менно ентот параметр отвечает за то, какой звук будет.
 		//верхний можешь потыркать, но не думаю, что это что-то изменит.
-		const int TimeSleep = 550;
+		const int TimeSleep = 1000;
 		//buttons
 	private: System::Void BUT_CheckEat_Click(System::Object ^ sender, System::EventArgs ^ e) {
 		DD->hungry = 0;
@@ -425,6 +436,8 @@ namespace HouseWithDogs {
 				 LBL_VolumeWD->Refresh();
 			 }
 			 void startEating() {
+				 DD->eating = DD->changeHungry(DD->hungry);
+				 WD->eating = WD->changeHungry(WD->hungry);
 				 while (DD->eating || WD->eating) {
 					 if (DD->eating && WD->eating) {
 						 DD->eat();
@@ -437,6 +450,7 @@ namespace HouseWithDogs {
 					 }
 					 else if (WD->eating) {
 						 WD->eat();
+						 DDvoice->Play();
 						 PIC->Image = Image::FromFile(path + "Eat\\2.png");
 					 }
 					 LBL_HungryDD->Text = DD->hungry.ToString();
@@ -462,21 +476,18 @@ namespace HouseWithDogs {
 					 spawnChild();
 				 }
 				 PIC->Image = Image::FromFile(path + "chill.png");
+				 PIC->Refresh();
+				 Thread::Sleep(TimeSleep * 2);
 			 }
 			 void changeLBLs() {
-				 LBL_AgrDD->Text = DD->agressive.ToString();
-				 LBL_AgrWD->Text = WD->agressive.ToString();
 				 LBL_HungryDD->Text = DD->hungry.ToString();
 				 LBL_HungryWD->Text = WD->hungry.ToString();
-				 LBL_AgrDD->Refresh();
-				 LBL_AgrWD->Refresh();
 				 LBL_HungryDD->Refresh();
 				 LBL_HungryWD->Refresh();
-				 changeVolumeDD(1);
-				 changeVolumeWD(1);
 			 }
 
 			 void spawnMen() {
+				 int count = 1;
 				 DD->checkUnknown(1, 0, DD->hungry);
 				 WD->checkUnknown(1, 0, WD->hungry);
 				 LBL_AgrDD->Text = DD->agressive.ToString();
@@ -485,28 +496,30 @@ namespace HouseWithDogs {
 				 LBL_AgrWD->Refresh();
 				 for (int i = 0; i < 5; i++) {
 					 if (i < 4) {
+						 count = 1;
 						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
 						 WD->changeVolume(WD->agressive);
 						 DD->changeVolume(WD->agressive);
 						 changeVolumeDD(DD->volume);
 						 changeVolumeWD(WD->volume);
 						 if (m->radius <= WD->ragezone) {
-							 Console::Beep(freq, dur);
+							 WDvoice->Play();
+							 count = 5;
 						 }
 					 }
-					 if (WD->agressive == 90 && i == 4) {
-						 WD->changeVolume(WD->agressive);
-						 changeVolumeWD(WD->volume);
-						 DD->changeVolume(WD->agressive);
-						 changeVolumeDD(DD->volume);
+					 if (WD->hungry <= 30 && i == 4) {
 						 PIC->Image = Image::FromFile(path + "Unknown\\" + i.ToString() + ".png");
+						 WDvoice->Play();
+						 m->radius = 100;
+						 count = 5;
 					 }
 					 m->radius -= 20;
 					 PIC->Refresh();
-					 Thread::Sleep(TimeSleep);
+					 Thread::Sleep(TimeSleep*count);
 				 }
 			 }
 			 void spawnCourier() {
+				 m->radius = 45;
 				 DD->checkUnknown(1, 1, DD->hungry);
 				 WD->checkUnknown(1, 1, WD->hungry);
 				 LBL_AgrDD->Text = DD->agressive.ToString();
@@ -514,20 +527,31 @@ namespace HouseWithDogs {
 				 LBL_AgrWD->Text = WD->agressive.ToString();
 				 LBL_AgrWD->Refresh();
 				 for (int i = 0; i < 4; i++) {
+
 					 WD->changeVolume(WD->agressive);
-					 changeVolumeWD(WD->volume); 
+					 changeVolumeWD(WD->volume);
 					 DD->changeVolume(WD->agressive);
 					 changeVolumeWD(DD->volume);
 					 PIC->Image = Image::FromFile(path + "PizzaTime\\" + i.ToString() + ".png");
-					 if (m->radius <= WD->ragezone|| m->radius<=DD->ragezone) {
-						 Console::Beep(freq, dur);
+					 PIC->Refresh();
+					 //if (m->radius <= WD->ragezone) {
+						 //WDvoice->Play();
+						 //Thread::Sleep(TimeSleep);
+					// }
+					if(m->radius == DD->ragezone) {
+						DDvoice->Play();
+						Thread::Sleep(TimeSleep);
 					 }
 					 PIC->Refresh();
 					 if (i == 2) {
 						 WD->GrandSpawn();
 						 DD->GrandSpawn();
 					 }
-					 m->radius -= 25;
+					 if (i == 3) {
+						 DDvoice->Play();
+						 Thread::Sleep(TimeSleep);
+					 }
+					 m->radius -= 5;
 					 Thread::Sleep(TimeSleep);
 				 }
 			 }
@@ -544,10 +568,16 @@ namespace HouseWithDogs {
 				 changeVolumeWD(WD->volume);
 				 PIC->Image = Image::FromFile(path + a.ToString() + ".png");
 				 PIC->Refresh();
-				 Console::Beep(freq, dur);
+				 if (a == 1) {
+					 DDvoice->Play();
+					 Thread::Sleep(TimeSleep);
+					 WDvoice->Play();
+					 Thread::Sleep(TimeSleep * 4);
+				 }
 				 Thread::Sleep(TimeSleep);
 			 }
 			 void spawnMaster() {
+				 m->radius = 70;
 				 DD->grandmaster = 1;
 				 WD->grandmaster = 1;
 				 DD->GrandSpawn();
@@ -572,11 +602,12 @@ namespace HouseWithDogs {
 				 startEating();
 				 DD->hungry -= 15;
 				 WD->hungry -= 5;
+				 changeLBLs();
 				 //I KNOW WHO WILL SPAWN, WUAHAHAHAH
 				 //Mb its needed to delete, but pust' budet;
 			 }
 	private: System::Void Debug___Click(System::Object^ sender, System::EventArgs^ e) {
-		Console::Beep(freq, dur);
+		
 	}
 };
 }
